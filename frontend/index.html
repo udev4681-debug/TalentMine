@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalentMine — Candidate Intelligence Platform</title>
+<meta name="description" content="TalentMine mines publicly available candidate data, validates it automatically, and reveals the talent patterns hidden inside it.">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Modular Stylesheet -->
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- ============ SCREEN: HOME ============ -->
+<div class="screen active" id="screen-home">
+
+<header>
+  <nav aria-label="Primary">
+    <a href="#top" class="logo" aria-label="TalentMine home">
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#22E4FF"/>
+            <stop offset="0.55" stop-color="#9B5CFF"/>
+            <stop offset="1" stop-color="#2FE6B0"/>
+          </linearGradient>
+        </defs>
+        <path d="M16 2L29 9.5V22.5L16 30L3 22.5V9.5L16 2Z" fill="url(#logoGrad)"/>
+        <path d="M4 12L16 18L28 12" stroke="#04060B" stroke-opacity="0.4" stroke-width="1.3"/>
+        <path d="M16 18V29.4" stroke="#04060B" stroke-opacity="0.4" stroke-width="1.3"/>
+      </svg>
+      TALENTMINE
+    </a>
+    <ul class="nav-links">
+      <li><a href="#top">Network</a></li>
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#" class="btn btn-outline btn-sm" data-goto="screen-register">Register</a>
+      <a href="#" class="btn btn-solid btn-sm" data-goto="screen-login">Login</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </nav>
+  <ul class="nav-links-mobile" id="mobileMenu">
+    <li><a href="#top">Network</a></li>
+    <li><a href="#pipeline">Pipeline</a></li>
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#" class="btn btn-outline btn-sm" data-goto="screen-register">Register</a></li>
+    <li><a href="#" class="btn btn-solid btn-sm" data-goto="screen-login">Login</a></li>
+  </ul>
+</header>
+
+<main id="main">
+
+  <!-- HERO: 3D Candidate Intelligence Network -->
+  <section class="hero" id="top">
+    <canvas id="galaxy-canvas" aria-hidden="true"></canvas>
+    <div class="hero-vignette" aria-hidden="true"></div>
+    <div class="hero-scanline" aria-hidden="true"></div>
+
+    <div class="hero-inner wrap">
+      <div class="hero-copy">
+        <div class="eyebrow mono">CANDIDATE INTELLIGENCE PLATFORM</div>
+        <h1>Discover the intelligence hidden inside <span class="grad">candidate data</span>.</h1>
+        <p class="lede">Mine, analyze, connect, and understand candidate data to uncover the talent patterns that traditional recruitment systems miss.</p>
+        <div class="hero-cta">
+          <a href="#" class="btn btn-solid" data-goto="screen-mining">Explore Talent Data</a>
+          <a href="#pipeline" class="btn btn-outline">See How It Works</a>
+        </div>
+        <div class="hero-status mono">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          LIVE NETWORK — <span id="nodeCount">—</span> NODES RENDERED
+        </div>
+      </div>
+
+      <div class="dna-label" aria-hidden="true">
+        <div class="dna-tag mono">TALENT DNA</div>
+        <div class="dna-legend mono">SKILLS · EXPERIENCE · EDUCATION · PROJECTS · TRAJECTORY</div>
+      </div>
+    </div>
+
+    <a href="#pipeline" class="scroll-cue" aria-label="Scroll to pipeline section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v14M6 13l6 6 6-6"/></svg>
+    </a>
+  </section>
+
+  <!-- SOURCES -->
+  <div class="source-strip">
+    <div class="wrap">
+      <p class="mono">PUBLIC SOURCES TALENTMINE READS</p>
+      <div class="marks mono">
+        <span>PUBLIC PROFILES</span><span>PORTFOLIO SITES</span><span>PUBLISHED CONTACT DETAILS</span><span>INDUSTRY &amp; ROLE LISTINGS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIPELINE -->
+  <section id="pipeline">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow mono">DATA MINING PIPELINE</div>
+        <h2>From Raw Data to Talent Intelligence</h2>
+        <p>Every search moves through the same pipeline — nothing is stored until it has passed through validation.</p>
+      </div>
+
+      <div class="pipeline-canvas-wrap hud-corners">
+        <canvas id="pipeline-canvas"></canvas>
+      </div>
+
+      <div class="steps">
+        <div class="step-card hud-corners reveal">
+          <span class="step-num mono">01 — SEARCH</span>
+          <h3>Set your search criteria</h3>
+          <p>Choose a skill set, job role, and industry, then narrow results by experience level or location.</p>
+        </div>
+        <div class="step-card hud-corners reveal">
+          <span class="step-num mono">02 — COLLECT &amp; VALIDATE</span>
+          <h3>Gather and check the data</h3>
+          <p>Publicly available details are collected, profile links and contact formats are checked, and duplicates are removed.</p>
+        </div>
+        <div class="step-card hud-corners reveal">
+          <span class="step-num mono">03 — STORE &amp; EXPORT</span>
+          <h3>Keep it or export it</h3>
+          <p>Verified records are stored in your database, ready to export to Excel or sync with Google Sheets whenever you need them.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section id="capabilities">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow mono">CORE MODULES</div>
+        <h2>Six systems inside the platform.</h2>
+        <p>Each capability maps to a real step between running a search and having a clean, exportable record.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card hud-corners reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l5 5"/></svg>
+          </div>
+          <h3>Search &amp; filter</h3>
+          <p>Find candidates by skill set, job role, and industry, then narrow results further by experience level or location.</p>
+        </div>
+        <div class="feature-card hud-corners reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 18a4.5 4.5 0 01-.5-8.98A5.5 5.5 0 0117 8.5a4 4 0 01-.5 7.98"/><path d="M12 12v6M9.5 15.5L12 18l2.5-2.5"/></svg>
+          </div>
+          <h3>Public data collection</h3>
+          <p>Gathers publicly available details — designation, experience, skills, qualifications, and location — from accessible online sources.</p>
+        </div>
+        <div class="feature-card hud-corners reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7l7-4z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <h3>Link &amp; format validation</h3>
+          <p>Checks that each profile link is reachable and that collected email addresses and phone numbers match a valid format before anything is saved.</p>
+        </div>
+        <div class="feature-card hud-corners reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="11" height="11" rx="2"/><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M11 15l1.5 1.5L16 13"/></svg>
+          </div>
+          <h3>Duplicate detection</h3>
+          <p>Automatically finds and removes duplicate candidate records so the same person doesn't appear twice.</p>
+        </div>
+        <div class="feature-card hud-corners reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+          </div>
+          <h3>Centralized database</h3>
+          <p>Every verified record is stored in one database you can search, filter, update, and manage via PHP APIs.</p>
+        </div>
+        <div class="feature-card hud-corners reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/><path d="M15 21v-4h4"/></svg>
+          </div>
+          <h3>Export to Excel &amp; Sheets</h3>
+          <p>Download a verified dataset as an Excel file, or sync it directly to Google Sheets for outreach and analysis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE DATA CONSOLE -->
+  <section id="console">
+    <div class="wrap showcase">
+      <div class="showcase-copy">
+        <div class="eyebrow mono">INSIDE THE PLATFORM</div>
+        <h2>One console, from search to export.</h2>
+        <p>Search by skill, role, industry, and location, then let TalentMine validate and store every record automatically — nothing leaves for a spreadsheet until you export it.</p>
+        <ul class="checklist">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Every profile link is checked before it's saved</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Duplicate records are flagged and removed automatically</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Export a clean dataset to Excel or Google Sheets anytime</li>
+        </ul>
+      </div>
+
+      <div class="console-panel hud-corners reveal">
+        <div class="console-topbar mono">
+          <span class="pulse-dot small"></span> TALENTMINE_CONSOLE
+        </div>
+
+        <div class="chip-row">
+          <span class="chip mono">SKILL SET</span>
+          <span class="chip mono">JOB ROLE</span>
+          <span class="chip mono">INDUSTRY</span>
+          <span class="chip mono">LOCATION</span>
+        </div>
+
+        <div class="validate-row mono"><span class="check-dot"></span> PROFILE LINK REACHABLE</div>
+        <div class="validate-row mono"><span class="check-dot"></span> EMAIL FORMAT VALID</div>
+        <div class="validate-row mono"><span class="check-dot"></span> PHONE FORMAT VALID</div>
+        <div class="validate-row mono"><span class="check-dot"></span> DUPLICATE CHECK PASSED</div>
+
+        <div class="export-row">
+          <button type="button" class="btn btn-outline btn-sm" id="demoExportExcel">Export to Excel</button>
+          <button type="button" class="btn btn-outline btn-sm" id="demoSyncSheets">Sync Google Sheets</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap about-grid">
+      <div>
+        <div class="eyebrow mono">ABOUT TALENTMINE</div>
+        <h2>Built to replace copy-paste sourcing.</h2>
+        <p class="lede" style="max-width:560px;">Sourcing candidates manually usually means searching several sites, then copying details into a spreadsheet by hand — a process that's slow and easy to get wrong, with duplicate or outdated entries piling up over time. TalentMine automates that collection step and checks the result before it's stored, so the record you keep is one you can trust, built entirely from information candidates have already made public.</p>
+      </div>
+      <div class="principles">
+        <div class="principle-card hud-corners reveal">
+          <h4>Public data only</h4>
+          <p>TalentMine works from information that's already publicly accessible, in line with applicable privacy laws and source-site terms of service.</p>
+        </div>
+        <div class="principle-card hud-corners reveal">
+          <h4>Validated before it's stored</h4>
+          <p>Profile links, email formats, and phone formats are checked automatically, and duplicate records are removed before saving.</p>
+        </div>
+        <div class="principle-card hud-corners reveal">
+          <h4>You stay in control</h4>
+          <p>You choose the search criteria, review what's collected, and decide what gets exported and where it goes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="cta-banner hud-corners reveal">
+        <h2>Begin mining talent intelligence.</h2>
+        <p>Create an account, run your first search, and export a validated candidate dataset the same day.</p>
+        <div class="hero-cta" style="justify-content:center;">
+          <a href="#" class="btn btn-solid" data-goto="screen-register">Create free account</a>
+          <a href="#" class="btn btn-outline" data-goto="screen-login">Login</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="logoGradFooter" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#22E4FF"/>
+                <stop offset="0.55" stop-color="#9B5CFF"/>
+                <stop offset="1" stop-color="#2FE6B0"/>
+              </linearGradient>
+            </defs>
+            <path d="M16 2L29 9.5V22.5L16 30L3 22.5V9.5L16 2Z" fill="url(#logoGradFooter)"/>
+          </svg>
+          TALENTMINE
+        </div>
+        <p>Public candidate data, searched, validated, and exported in one place.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="mono">PRODUCT</h4>
+        <ul>
+          <li><a href="#capabilities">Capabilities</a></li>
+          <li><a href="#console">Console</a></li>
+          <li><a href="#pipeline">Pipeline</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="mono">WORKSPACE</h4>
+        <ul>
+          <li><a href="#" data-goto="screen-dashboard">Dashboard</a></li>
+          <li><a href="#" data-goto="screen-mining">Mining Setup</a></li>
+          <li><a href="#" data-goto="screen-login">Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="mono">INTEGRATIONS</h4>
+        <ul>
+          <li><a href="#" data-goto="screen-dashboard">Google Sheets Sync</a></li>
+          <li><a href="#" data-goto="screen-dashboard">CSV / JSON Export</a></li>
+          <li><a href="#" data-goto="screen-login">Firebase Google Auth</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom mono">
+      <span>© 2026 TALENTMINE. CANDIDATE INTELLIGENCE ARCHITECTURE.</span>
+      <span>PHP BACKEND &bull; FIREBASE AUTH READY &bull; VERCEL DEPLOYABLE</span>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /screen-home -->
+
+<!-- ============ SCREEN: REGISTER ============ -->
+<div class="screen" id="screen-register">
+  <div class="auth-shell">
+    <a href="#" class="auth-back mono" data-goto="screen-home">&larr; BACK TO HOME</a>
+    <div class="auth-card auth-card--sharp hud-corners">
+      <a href="#" class="logo auth-logo" data-goto="screen-home" aria-label="TalentMine home">
+        <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="logoGradRegister" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#22E4FF"/>
+              <stop offset="0.55" stop-color="#9B5CFF"/>
+              <stop offset="1" stop-color="#2FE6B0"/>
+            </linearGradient>
+          </defs>
+          <path d="M16 2L29 9.5V22.5L16 30L3 22.5V9.5L16 2Z" fill="url(#logoGradRegister)"/>
+        </svg>
+        TALENTMINE
+      </a>
+      <div class="eyebrow mono">CREATE ACCOUNT</div>
+      <h1 class="auth-title">Start mining talent data.</h1>
+      <p class="auth-sub">Set up your candidate workspace in under a minute.</p>
+
+      <form id="registerForm" class="auth-form" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label class="mono" for="regFirstName">FIRST NAME</label>
+            <input type="text" id="regFirstName" name="firstName" required autocomplete="given-name" maxlength="50" placeholder="e.g. Alex">
+          </div>
+          <div class="field">
+            <label class="mono" for="regLastName">LAST NAME</label>
+            <input type="text" id="regLastName" name="lastName" required autocomplete="family-name" maxlength="50" placeholder="e.g. Rivera">
+          </div>
+        </div>
+        <div class="field">
+          <label class="mono" for="regEmail">WORK EMAIL</label>
+          <input type="email" id="regEmail" name="workEmail" required autocomplete="email" placeholder="you@company.com" maxlength="100">
+        </div>
+        <button type="submit" class="btn btn-solid auth-submit">Create free account</button>
+      </form>
+
+      <div class="divider mono"><span>OR SIGN UP WITH</span></div>
+
+      <div class="social-row">
+        <button type="button" class="btn btn-outline btn-social" data-social="google">
+          <svg class="social-icon" viewBox="0 0 18 18" aria-hidden="true">
+            <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+            <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+            <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+            <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.581C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+          </svg>
+          Continue with Google
+        </button>
+        <button type="button" class="btn btn-outline btn-social" data-social="linkedin">
+          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="4" fill="#0A66C2"/>
+            <path fill="#fff" d="M7.2 9.5H4.9V19h2.3V9.5zM6 8.4a1.35 1.35 0 100-2.7 1.35 1.35 0 000 2.7zM19.1 19h-2.3v-5.1c0-1.2-.4-2-1.5-2-.8 0-1.3.6-1.5 1.1-.1.2-.1.5-.1.7V19h-2.3s.03-8.6 0-9.5h2.3v1.3c.3-.5 1-1.2 2.3-1.2 1.7 0 3 .1 3 3.5V19z"/>
+          </svg>
+          Continue with LinkedIn
+        </button>
+      </div>
+
+      <p class="auth-switch mono">ALREADY HAVE AN ACCOUNT? <a href="#" data-goto="screen-login">LOGIN</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN: LOGIN ============ -->
+<div class="screen" id="screen-login">
+  <div class="auth-shell">
+    <a href="#" class="auth-back mono" data-goto="screen-home">&larr; BACK TO HOME</a>
+    <div class="auth-card hud-corners">
+      <a href="#" class="logo auth-logo" data-goto="screen-home" aria-label="TalentMine home">
+        <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="logoGradLogin" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#22E4FF"/>
+              <stop offset="0.55" stop-color="#9B5CFF"/>
+              <stop offset="1" stop-color="#2FE6B0"/>
+            </linearGradient>
+          </defs>
+          <path d="M16 2L29 9.5V22.5L16 30L3 22.5V9.5L16 2Z" fill="url(#logoGradLogin)"/>
+        </svg>
+        TALENTMINE
+      </a>
+      <div class="eyebrow mono">WELCOME BACK</div>
+      <h1 class="auth-title">Login to TalentMine.</h1>
+      <p class="auth-sub">Pick up your candidate mining session where you left off.</p>
+
+      <form id="loginForm" class="auth-form" novalidate>
+        <div class="field">
+          <label class="mono" for="loginEmail">EMAIL</label>
+          <input type="email" id="loginEmail" name="email" required autocomplete="email" maxlength="100" placeholder="recruiter@company.com">
+        </div>
+        <div class="field">
+          <label class="mono" for="loginPassword">PASSWORD</label>
+          <input type="password" id="loginPassword" name="password" required minlength="8" maxlength="64" autocomplete="current-password" placeholder="••••••••">
+        </div>
+        <div class="field-inline">
+          <a href="#" class="forgot-link mono">FORGOT PASSWORD?</a>
+        </div>
+        <button type="submit" class="btn btn-solid auth-submit">Login</button>
+      </form>
+
+      <div class="divider mono"><span>OR SIGN IN WITH</span></div>
+
+      <div class="social-row">
+        <button type="button" class="btn btn-outline btn-social" data-social="google">
+          <svg class="social-icon" viewBox="0 0 18 18" aria-hidden="true">
+            <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+            <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+            <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+            <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.581C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+          </svg>
+          Continue with Google
+        </button>
+        <button type="button" class="btn btn-outline btn-social" data-social="linkedin">
+          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="4" fill="#0A66C2"/>
+            <path fill="#fff" d="M7.2 9.5H4.9V19h2.3V9.5zM6 8.4a1.35 1.35 0 100-2.7 1.35 1.35 0 000 2.7zM19.1 19h-2.3v-5.1c0-1.2-.4-2-1.5-2-.8 0-1.3.6-1.5 1.1-.1.2-.1.5-.1.7V19h-2.3s.03-8.6 0-9.5h2.3v1.3c.3-.5 1-1.2 2.3-1.2 1.7 0 3 .1 3 3.5V19z"/>
+          </svg>
+          Continue with LinkedIn
+        </button>
+      </div>
+
+      <p class="auth-switch mono">NEW HERE? <a href="#" data-goto="screen-register">CREATE AN ACCOUNT</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN: DASHBOARD ============ -->
+<div class="screen" id="screen-dashboard">
+  <div class="dash-shell">
+    <aside class="dash-sidebar">
+      <a href="#" class="logo" data-goto="screen-home" aria-label="TalentMine home">
+        <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="logoGradDash" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#22E4FF"/>
+              <stop offset="0.55" stop-color="#9B5CFF"/>
+              <stop offset="1" stop-color="#2FE6B0"/>
+            </linearGradient>
+          </defs>
+          <path d="M16 2L29 9.5V22.5L16 30L3 22.5V9.5L16 2Z" fill="url(#logoGradDash)"/>
+        </svg>
+        TALENTMINE
+      </a>
+
+      <nav class="dash-nav" aria-label="Dashboard">
+        <button type="button" class="dash-nav-item active mono" data-panel="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+          Overview
+        </button>
+        <button type="button" class="dash-nav-item mono" data-panel="analytics">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V10M11 20V4M18 20v-7"/></svg>
+          Mine Analytics
+        </button>
+        <button type="button" class="dash-nav-item mono" data-panel="export">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/><path d="M15 21v-4h4"/></svg>
+          Export
+        </button>
+        <button type="button" class="dash-nav-item mono" data-panel="shortlist">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 4l2.4 5 5.6.6-4.2 3.8 1.2 5.5-4.8-2.9L7.2 19l1.2-5.5L4.2 9.6l5.6-.6z"/></svg>
+          Shortlist
+        </button>
+      </nav>
+
+      <a href="#" class="dash-logout mono" data-goto="screen-home">&larr; LOG OUT</a>
+    </aside>
+
+    <main class="dash-main">
+      <!-- OVERVIEW -->
+      <div class="dash-panel active" id="panel-overview">
+        <div class="eyebrow mono">WORKSPACE OVERVIEW</div>
+        <h1>Your mining workspace.</h1>
+        <p class="workspace-user mono" id="workspaceUser">Workspace Owner</p>
+        <p class="dash-sub">Configure a talent search, then let TalentMine crawl, validate, and structure the candidate intelligence for your pipeline.</p>
+
+        <div class="start-mining-zone">
+          <button type="button" class="btn btn-solid btn-lg" id="startMiningBtn" data-goto="screen-mining">Start Mining</button>
+          <p class="mono start-mining-hint">SET YOUR TARGET COUNTRY, CITY &amp; CRITERIA ON THE NEXT PAGE</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card hud-corners">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="8" r="2.6"/><path d="M15.5 14.2c2.8.3 5 2.7 5 5.8"/></svg></div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">TOTAL CANDIDATES</div>
+          </div>
+          <div class="stat-card hud-corners">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 4L2 9l10 5 10-5-10-5z"/><path d="M6 11.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5"/></svg></div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">STUDENTS &amp; GRADS</div>
+          </div>
+          <div class="stat-card hud-corners">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M8.5 7.5V6a2 2 0 012-2h3a2 2 0 012 2v1.5"/><path d="M3.5 12.5h17"/></svg></div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">PROFESSIONALS</div>
+          </div>
+          <div class="stat-card hud-corners">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg></div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">MINING SESSIONS</div>
+          </div>
+        </div>
+        <p class="stats-note mono">CONNECTED WORKSPACE &bull; LIVE DATA SYNCHRONIZED</p>
+
+        <div class="overview-grid">
+          <div class="empty-state hud-corners"></div>
+          <div class="empty-state hud-corners"></div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="dash-panel" id="panel-analytics">
+        <div class="eyebrow mono">MINE ANALYTICS</div>
+        <h1>Session analytics &amp; audit.</h1>
+        <p class="dash-sub">Telemetry and pipeline audit logs captured across all your data mining runs.</p>
+        <div id="analyticsContent"></div>
+      </div>
+
+      <!-- EXPORT -->
+      <div class="dash-panel" id="panel-export">
+        <div class="eyebrow mono">DATA EXPORT</div>
+        <h1>Export validated talent data.</h1>
+        <p class="dash-sub">Deliver your cleaned candidate intelligence to spreadsheets, JSON feeds, or ATS platforms.</p>
+        <div id="exportContent"></div>
+      </div>
+
+      <!-- SHORTLIST -->
+      <div class="dash-panel" id="panel-shortlist">
+        <div class="eyebrow mono">CANDIDATE SHORTLIST</div>
+        <h1>Your starred talent.</h1>
+        <p class="dash-sub">Curated candidate profiles shortlisted from your queries for recruitment outreach.</p>
+        <div id="shortlistContent"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ SCREEN: MINING SETUP & RESULTS ============ -->
+<div class="screen" id="screen-mining">
+  <div class="dash-shell">
+    <aside class="dash-sidebar mining-sidebar">
+      <a href="#" class="logo" data-goto="screen-dashboard" aria-label="TalentMine dashboard">
+        <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="logoGradMining" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#22E4FF"/>
+              <stop offset="0.55" stop-color="#9B5CFF"/>
+              <stop offset="1" stop-color="#2FE6B0"/>
+            </linearGradient>
+          </defs>
+          <path d="M16 2L29 9.5V22.5L16 30L3 22.5V9.5L16 2Z" fill="url(#logoGradMining)"/>
+        </svg>
+        TALENTMINE
+      </a>
+
+      <a href="#" class="auth-back mono" data-goto="screen-dashboard">&larr; BACK TO DASHBOARD</a>
+
+      <div class="mining-filters hud-corners">
+        <div class="mining-setup-head mono">MINING SETUP</div>
+        <p class="mining-setup-sub">Choose a target country, city, and candidate profile type, then click Generate to mine.</p>
+
+        <div class="field">
+          <label class="mono" for="countrySelect">COUNTRY</label>
+          <select id="countrySelect">
+            <option value="">Select country</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="mono" for="citySelect">CITY</label>
+          <select id="citySelect">
+            <option value="">Select country first</option>
+          </select>
+          <input type="text" id="cityInput" placeholder="Enter city" hidden>
+        </div>
+
+        <div class="field">
+          <label class="mono" for="candidateType">CANDIDATE TYPE</label>
+          <select id="candidateType">
+            <option value="">Select type</option>
+            <option value="student">Student / Graduate</option>
+            <option value="professional">Working Professional</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn btn-solid" id="generateBtn" style="width:100%;">Generate</button>
+
+        <div class="mining-progress hud-corners" id="miningProgress" hidden>
+          <div class="mono" id="miningStatusText">RUNNING MINING SESSION…</div>
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="dash-main mining-main">
+      <div class="eyebrow mono">LIVE INTELLIGENCE SPREADSHEET</div>
+      <h1>Mining results.</h1>
+      <p class="dash-sub">Clean, verified talent records extracted by TalentMine with automated reachability and duplicate checks.</p>
+
+      <div class="spreadsheet-toolbar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l5 5"/></svg>
+          <input type="text" id="resultsSearch" placeholder="Instant search by name, skill, role, location…" aria-label="Search mining results">
+        </div>
+        <div class="toolbar-actions">
+          <span class="pending-badge mono" id="dataModeBadge">LOCAL DEMO ADAPTER</span>
+        </div>
+      </div>
+
+      <div class="spreadsheet-wrap hud-corners">
+        <table class="spreadsheet">
+          <thead>
+            <tr>
+              <th>Candidate Name</th>
+              <th>Designation</th>
+              <th>Experience</th>
+              <th>Skills</th>
+              <th>Location</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th style="text-align:center;">Shortlist</th>
+            </tr>
+          </thead>
+          <tbody id="spreadsheetBody">
+            <tr class="spreadsheet-empty-row" id="spreadsheetEmptyRow">
+              <td colspan="8">
+                <div class="pending-panel-inline">
+                  <svg class="pending-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l3 2"/></svg>
+                  <p class="mono" id="spreadsheetMessage">SET YOUR SEARCH CRITERIA AND CLICK GENERATE</p>
+                  <p class="pending-sub">Rows will populate here with verified candidate records.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ CANDIDATE DETAIL MODAL ============ -->
+<div class="modal" id="candidateModal" hidden role="dialog" aria-modal="true" aria-label="Candidate details">
+  <div class="modal-backdrop" data-modal-close></div>
+  <div class="modal-card hud-corners" role="document">
+    <button class="modal-x" type="button" data-modal-close aria-label="Close modal">×</button>
+    <div id="candidateModalContent"></div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer"></div>
+
+<!-- Modular Scripts -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="./js/config.js"></script>
+<script>
+  if (window.firebase && typeof CONFIG !== 'undefined' && CONFIG.FIREBASE_CONFIG) {
+    try {
+      firebase.initializeApp(CONFIG.FIREBASE_CONFIG);
+    } catch (e) {
+      console.warn("Firebase initialization notice:", e);
+    }
+  }
+</script>
+<script src="./js/data.js"></script>
+<script src="./js/api.js"></script>
+<script src="./js/canvas.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/dashboard.js"></script>
+<script src="./js/mining.js"></script>
+<script src="./js/main.js"></script>
+</body>
+</html>
