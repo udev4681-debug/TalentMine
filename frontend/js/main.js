@@ -9,9 +9,9 @@ const StateManager = {
       const parsed = raw ? JSON.parse(raw) : {};
       return {
         candidates: Array.isArray(parsed.candidates) ? parsed.candidates : [],
-        shortlist: Array.isArray(parsed.shortlist) ? parsed.shortlist : [],
-        sessions: Array.isArray(parsed.sessions) ? parsed.sessions : [],
-        user: parsed.user || null
+        shortlist:  Array.isArray(parsed.shortlist)  ? parsed.shortlist  : [],
+        sessions:   Array.isArray(parsed.sessions)   ? parsed.sessions   : [],
+        user:       parsed.user || null
       };
     } catch (e) {
       return { candidates: [], shortlist: [], sessions: [], user: null };
@@ -62,7 +62,7 @@ const NavigationModule = {
   init() {
     this.bindScreenTransitions();
     this.bindMobileMenu();
-    this.bindShowcaseDemo();
+    this.bindExportButtons();
   },
 
   showScreen(screenId) {
@@ -88,16 +88,14 @@ const NavigationModule = {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const target = btn.getAttribute('data-goto');
-        if (target) {
-          this.showScreen(target);
-        }
+        if (target) this.showScreen(target);
       });
     });
   },
 
   bindMobileMenu() {
     const toggle = document.getElementById('menuToggle');
-    const menu = document.getElementById('mobileMenu');
+    const menu   = document.getElementById('mobileMenu');
     if (!toggle || !menu) return;
 
     toggle.addEventListener('click', () => {
@@ -113,21 +111,24 @@ const NavigationModule = {
     });
   },
 
-  bindShowcaseDemo() {
-    // Interactive buttons inside the hero showcase console
-    const excelDemoBtn = document.getElementById('demoExportExcel');
+  bindExportButtons() {
+    // Hero showcase export buttons — operate on real session data only
+    const excelDemoBtn  = document.getElementById('demoExportExcel');
     const sheetsDemoBtn = document.getElementById('demoSyncSheets');
 
     excelDemoBtn?.addEventListener('click', () => {
-      DashboardModule.downloadCSV(FALLBACK_CANDIDATES.slice(0, 5), 'talentmine_demo_sample.csv');
-      Toast.show('Downloaded TalentMine sample dataset (Excel/CSV)', 'success');
+      const state = StateManager.getState();
+      const pool  = state.candidates || [];
+      if (pool.length === 0) {
+        Toast.show('No candidates in workspace yet. Run a mining session first.', 'info');
+        return;
+      }
+      DashboardModule.downloadCSV(pool.slice(0, 20), 'talentmine_export.csv');
+      Toast.show(`Exported ${Math.min(pool.length, 20)} candidates to CSV.`, 'success');
     });
 
     sheetsDemoBtn?.addEventListener('click', () => {
-      Toast.show('Initiating Google Sheets API handshake...', 'info');
-      setTimeout(() => {
-        Toast.show('Sample talent intelligence synced with Google Cloud Sheets demo!', 'success');
-      }, 1000);
+      Toast.show('Google Sheets sync will be available once the live API is connected.', 'info');
     });
   }
 };
@@ -155,32 +156,6 @@ function initScrollReveal() {
 
 // Global App Initialization
 document.addEventListener('DOMContentLoaded', () => {
-  // Proactively initialize state with fallback candidates if empty for high-fidelity experience
-  const state = StateManager.getState();
-  if (!state.candidates || state.candidates.length === 0) {
-    state.candidates = [...FALLBACK_CANDIDATES];
-    state.sessions = [
-      {
-        id: 'S-INIT',
-        createdAt: new Date(Date.now() - 3600000).toISOString(),
-        country: 'India',
-        city: 'Bengaluru',
-        type: 'professional',
-        count: 8
-      },
-      {
-        id: 'S-INIT2',
-        createdAt: new Date(Date.now() - 7200000).toISOString(),
-        country: 'United States',
-        city: 'San Francisco',
-        type: 'student',
-        count: 7
-      }
-    ];
-    state.shortlist = ['TM-101', 'TM-104'];
-    StateManager.saveState(state);
-  }
-
   Toast.init();
   NavigationModule.init();
   CanvasModule.initHeroNetwork();
@@ -190,15 +165,15 @@ document.addEventListener('DOMContentLoaded', () => {
   MiningModule.init();
   initScrollReveal();
 
-  // Test backend connection and notify user non-intrusively
+  // Show backend connection status badge
   DataAdapter.probeBackend().then(hasBackend => {
     const badge = document.getElementById('dataModeBadge');
     if (badge) {
       if (hasBackend) {
-        badge.textContent = 'PHP BACKEND CONNECTED';
+        badge.textContent = 'API CONNECTED';
         badge.classList.add('is-live');
       } else {
-        badge.textContent = 'LOCAL DEMO ADAPTER';
+        badge.textContent = 'API OFFLINE';
         badge.classList.remove('is-live');
       }
     }

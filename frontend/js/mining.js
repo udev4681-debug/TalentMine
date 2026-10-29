@@ -135,7 +135,22 @@ const MiningModule = {
         type: type.value
       };
 
-      const { results, source } = await DataAdapter.runMining(queryData);
+      let results = [];
+      let source = '';
+
+      try {
+        const response = await DataAdapter.runMining(queryData);
+        results = response.results;
+        source  = response.source;
+      } catch (err) {
+        console.error('Mining API error:', err);
+        btn.disabled = false;
+        progress.hidden = true;
+        fill.style.width = '0%';
+        if (msg) msg.textContent = '';
+        Toast.show('API error — could not fetch candidates. Check that the backend is running.', 'error');
+        return;
+      }
 
       fill.style.width = '100%';
       if (badge) {
@@ -282,7 +297,7 @@ const MiningModule = {
 
   openCandidateModal(id) {
     const state = StateManager.getState();
-    const all = [...(this.currentResults || []), ...(state.candidates || []), ...FALLBACK_CANDIDATES];
+    const all = [...(this.currentResults || []), ...(state.candidates || [])];
     const candidate = all.find(c => c.id === id);
     if (!candidate) return;
 
