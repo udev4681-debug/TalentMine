@@ -88,7 +88,18 @@ const NavigationModule = {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const target = btn.getAttribute('data-goto');
-        if (target) this.showScreen(target);
+        if (!target) return;
+
+        // Guard: dashboard and mining require an active user session
+        if ((target === 'screen-dashboard' || target === 'screen-mining')) {
+          const state = StateManager.getState();
+          if (!state.user) {
+            NavigationModule.showScreen('screen-login');
+            return;
+          }
+        }
+
+        this.showScreen(target);
       });
     });
   },
@@ -160,7 +171,18 @@ document.addEventListener('DOMContentLoaded', () => {
   NavigationModule.init();
   CanvasModule.initHeroNetwork();
   CanvasModule.initPipelineCanvas();
+
+  // Auth must init before anything else so it can restore the session and
+  // route straight to dashboard if the user is already logged in.
+  // restoreSession() calls showScreen() internally when a session exists.
   AuthModule.init();
+
+  // If no session was restored, show the home screen as the default
+  const state = StateManager.getState();
+  if (!state.user) {
+    NavigationModule.showScreen('screen-home');
+  }
+
   DashboardModule.init();
   MiningModule.init();
   initScrollReveal();

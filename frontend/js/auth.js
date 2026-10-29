@@ -1,6 +1,6 @@
 /**
  * TalentMine — Authentication Module
- * Handles Registration, Login, Google Auth (Firebase Ready), and Session State
+ * Handles Registration, Login, Google Auth (Firebase), and Session Persistence
  */
 
 const AuthModule = {
@@ -11,30 +11,82 @@ const AuthModule = {
     this.bindSocialAuth();
     this.bindForgotPassword();
     this.bindLogout();
-    this.loadUserSession();
+    this.restoreSession();
   },
 
-  loadUserSession() {
+  /**
+   * Called on every page load.
+   * Checks localStorage first, then Firebase onAuthStateChanged.
+   * Whichever fires first with a valid user wins; the other is a no-op.
+   */
+  restoreSession() {
+    // 1. Check localStorage immediately (instant, no async wait)
     const state = StateManager.getState();
     if (state && state.user) {
       this.user = state.user;
       this.updateUserUI();
+      NavigationModule.showScreen('screen-dashboard');
+    }
+
+    // 2. Also hook Firebase onAuthStateChanged so Google sessions survive refresh
+    if (window.firebase && window.firebase.auth) {
+      firebase.auth().onAuthStateChanged(firebaseUser => {
+        if (firebaseUser) {
+          // Firebase has an active session — sync it into our state
+          const userData = {
+            name:     firebaseUser.displayName || firebaseUser.email.split('@')[0],
+            email:    firebaseUser.email,
+            avatar:   firebaseUser.photoURL || null,
+            provider: 'firebase-google'
+          };
+          // Only update if not already showing dashboard (avoid redundant re-render)
+          if (!this.user || this.user.email !== firebaseUser.email) {
+            this.setUserSession(userData);
+            NavigationModule.showScreen('screen-dashboard');
+          }
+        } else {
+          // Firebase has no session — if our localStorage user was firebase-google,
+          // it means the Firebase token expired; clear it
+          const currentState = StateManager.getState();
+          if (currentState.user && currentState.user.provider === 'firebase-google') {
+            this.clearSession();
+          }
+        }
+      });
     }
   },
 
   updateUserUI() {
     const el = document.getElementById('workspaceUser');
     if (el) {
-      el.textContent = this.user ? `${this.user.name} (${this.user.email})` : 'Workspace Owner';
+      el.textContent = this.user
+        ? `${this.user.name} (${this.user.email})`
+        : 'Workspace Owner';
     }
   },
 
+  setUserSession(userData) {
+    this.user = userData;
+    const state = StateManager.getState();
+    state.user = userData;
+    StateManager.saveState(state);
+    this.updateUserUI();
+  },
+
+  clearSession() {
+    this.user = null;
+    const state = StateManager.getState();
+    state.user = null;
+    StateManager.saveState(state);
+    this.updateUserUI();
+  },
+
   bindForms() {
-    // Register Form
+    // ── Register Form ─────────────────────────────────────────────────────────
     const rf = document.getElementById('registerForm');
     if (rf) {
       const first = document.getElementById('regFirstName');
-      const last = document.getElementById('regLastName');
+      const last  = document.getElementById('regLastName');
       const email = document.getElementById('regEmail');
 
       [first, last, email].forEach(input => {
@@ -65,21 +117,16 @@ const AuthModule = {
         }
 
         const fullName = `${first.value.trim()} ${last.value.trim()}`;
-        this.setUserSession({
-          name: fullName,
-          email: email.value.trim(),
-          provider: 'email'
-        });
-
+        this.setUserSession({ name: fullName, email: email.value.trim(), provider: 'email' });
         Toast.show(`Welcome to TalentMine, ${first.value.trim()}! Workspace initialized.`, 'success');
         NavigationModule.showScreen('screen-dashboard');
       });
     }
 
-    // Login Form
+    // ── Login Form ────────────────────────────────────────────────────────────
     const lf = document.getElementById('loginForm');
     if (lf) {
-      const email = document.getElementById('loginEmail');
+      const email    = document.getElementById('loginEmail');
       const password = document.getElementById('loginPassword');
 
       [email, password].forEach(input => {
@@ -105,14 +152,9 @@ const AuthModule = {
           return;
         }
 
-        const username = email.value.split('@')[0];
+        const username      = email.value.split('@')[0];
         const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
-        this.setUserSession({
-          name: formattedName,
-          email: email.value.trim(),
-          provider: 'email'
-        });
-
+        this.setUserSession({ name: formattedName, email: email.value.trim(), provider: 'email' });
         Toast.show(`Welcome back, ${formattedName}! Mining session active.`, 'success');
         NavigationModule.showScreen('screen-dashboard');
       });
@@ -120,109 +162,79 @@ const AuthModule = {
   },
 
   bindSocialAuth() {
-    // Google Auth Buttons
-    const googleBtns = document.querySelectorAll('.btn-social:has(svg path[fill="#4285F4"]), [data-social="google"]');
-    googleBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.triggerGoogleAuth();
-      });
-    });
+    const googleBtns   = document.querySelectorAll('[data-social="google"]');
+    const linkedinBtns = document.querySelectorAll('[data-social="linkedin"]');
 
-    // LinkedIn Auth Buttons
-    const linkedinBtns = document.querySelectorAll('.btn-social:has(svg rect[fill="#0A66C2"]), [data-social="linkedin"]');
+    googleBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => { e.preventDefault(); this.triggerGoogleAuth(); });
+    });
     linkedinBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.triggerLinkedInAuth();
-      });
+      btn.addEventListener('click', (e) => { e.preventDefault(); this.triggerLinkedInAuth(); });
     });
   },
 
   triggerGoogleAuth() {
-    // Check if Firebase Auth is initialized on window
     if (window.firebase && window.firebase.auth) {
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider)
         .then(result => {
-          const user = result.user;
+          const u = result.user;
           this.setUserSession({
-            name: user.displayName || 'Google Recruiter',
-            email: user.email,
-            avatar: user.photoURL,
+            name:     u.displayName || u.email.split('@')[0],
+            email:    u.email,
+            avatar:   u.photoURL || null,
             provider: 'firebase-google'
           });
-          Toast.show(`Authenticated via Google: ${user.email}`, 'success');
+          Toast.show(`Authenticated via Google: ${u.email}`, 'success');
           NavigationModule.showScreen('screen-dashboard');
         })
         .catch(error => {
-          console.error("Firebase Auth Error", error);
-          Toast.show(`Firebase Auth: ${error.message}`, 'info');
+          console.error('Firebase Auth Error', error);
+          Toast.show(`Google sign-in failed: ${error.message}`, 'info');
         });
       return;
     }
-
-    // Default High-Fidelity Google OAuth Simulator
-    const emailCandidate = 'alex.recruiter@gmail.com';
-    this.setUserSession({
-      name: 'Alex Rivera',
-      email: emailCandidate,
-      provider: 'google',
-      avatar: 'https://lh3.googleusercontent.com/a/default-user=s96-c'
-    });
-
-    Toast.show(`Google OAuth verified! Logged in as Alex Rivera (${emailCandidate})`, 'success');
-    NavigationModule.showScreen('screen-dashboard');
+    // Firebase not loaded — inform user rather than injecting fake data
+    Toast.show('Google sign-in is not available in this environment. Please use email login.', 'info');
   },
 
   triggerLinkedInAuth() {
-    this.setUserSession({
-      name: 'Sarah Sterling',
-      email: 's.sterling@talentpartners.com',
-      provider: 'linkedin'
-    });
-
-    Toast.show(`LinkedIn OAuth verified! Logged in as Sarah Sterling`, 'success');
-    NavigationModule.showScreen('screen-dashboard');
+    // LinkedIn OAuth requires a server-side redirect — not available yet
+    Toast.show('LinkedIn sign-in will be available once the OAuth redirect URI is configured.', 'info');
   },
 
   bindForgotPassword() {
-    const forgotLinks = document.querySelectorAll('.forgot-link');
-    forgotLinks.forEach(link => {
+    document.querySelectorAll('.forgot-link').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        const email = prompt("Enter your account email to receive a password recovery link:", "recruiter@company.com");
+        const email = prompt('Enter your account email to receive a password reset link:');
         if (email && this.isValidEmail(email)) {
           Toast.show(`Password reset instructions sent to ${email}`, 'success');
-        } else if (email) {
-          Toast.show("Please enter a valid email address.", "info");
+        } else if (email !== null) {
+          Toast.show('Please enter a valid email address.', 'info');
         }
       });
     });
   },
 
   bindLogout() {
-    const logoutBtns = document.querySelectorAll('.dash-logout');
-    logoutBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.user = null;
-        const state = StateManager.getState();
-        state.user = null;
-        StateManager.saveState(state);
-        this.updateUserUI();
-        Toast.show("Logged out of TalentMine workspace.", "info");
-        NavigationModule.showScreen('screen-home');
-      });
-    });
-  },
+    // Use delegated click — handles both static and dynamically added logout buttons.
+    // Prevent the data-goto handler from also firing by stopping propagation.
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.dash-logout');
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();   // ← stops [data-goto] handler from double-firing
 
-  setUserSession(userData) {
-    this.user = userData;
-    const state = StateManager.getState();
-    state.user = userData;
-    StateManager.saveState(state);
-    this.updateUserUI();
+      // Sign out of Firebase if active
+      if (window.firebase && window.firebase.auth) {
+        firebase.auth().signOut().catch(() => {});
+      }
+
+      this.clearSession();
+      Toast.show('Logged out of TalentMine workspace.', 'info');
+      NavigationModule.showScreen('screen-home');
+    });
   },
 
   isValidEmail(val) {
@@ -243,7 +255,7 @@ const AuthModule = {
   },
 
   clearFieldError(input) {
-    const field = input.closest('.field');
+    const field = input?.closest('.field');
     if (!field) return;
     field.classList.remove('field-error');
     field.querySelector('.field-msg')?.remove();
